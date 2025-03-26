@@ -120,9 +120,9 @@ func (h *Handler) Register(session *discordgo.Session, message *discordgo.Messag
 		return
 	}
 
-	if err := session.GuildMemberRoleAdd(h.cfg.Discord.GuildID, message.Author.ID, h.cfg.Discord.RegisterRoleID); err != nil {
-		h.log.Error().Err(err).Msgf("register_handler -> failed to add role %s to player %s", h.cfg.Discord.RegisterRoleID, message.Author.ID)
-	}
+	// if err := session.GuildMemberRoleAdd(h.cfg.Discord.GuildID, message.Author.ID, h.cfg.Discord.RegisterRoleID); err != nil {
+	// 	h.log.Error().Err(err).Msgf("register_handler -> failed to add role %s to player %s", h.cfg.Discord.RegisterRoleID, message.Author.ID)
+	// }
 
 	if err := session.MessageReactionAdd(message.ChannelID, message.ID, consts.PositiveReaction); err != nil {
 		h.log.Error().Err(err).Msgf("register_handler -> failed to add feedback reaction to message %s", message.ID)
