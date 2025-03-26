@@ -66,7 +66,7 @@ func (h *Handler) Register(session *discordgo.Session, message *discordgo.Messag
 
 	if !subscriber {
 		reply := &discordgo.MessageSend{
-			Content:   "Você não é um inscrito. Talvez tenha esquecido de vincular a conta da Twitch com o Discord?",
+			Content:   "Você não é inscrito no canal. Talvez tenha esquecido de vincular a conta da Twitch com o Discord?",
 			Reference: reference,
 		}
 
