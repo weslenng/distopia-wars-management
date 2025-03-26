@@ -55,6 +55,28 @@ func (h *Handler) Register(session *discordgo.Session, message *discordgo.Messag
 		GuildID:   message.GuildID,
 	}
 
+	subscriber := false
+
+	for _, role := range message.Member.Roles {
+		if role == h.cfg.Discord.SubscriberRoleID {
+			subscriber = true
+			break
+		}
+	}
+
+	if !subscriber {
+		reply := &discordgo.MessageSend{
+			Content:   "Você não é um subscriber",
+			Reference: reference,
+		}
+
+		if _, err := session.ChannelMessageSendComplex(message.ChannelID, reply); err != nil {
+			h.log.Error().Err(err).Msgf("register_handler -> failed to reply to message %s", message.ID)
+		}
+
+		return
+	}
+
 	if len(args) != RegisterArgs {
 		reply := &discordgo.MessageSend{
 			Content:   "O comando deve conter um argumento. e.g. .register savi2w",
@@ -98,8 +120,8 @@ func (h *Handler) Register(session *discordgo.Session, message *discordgo.Messag
 		return
 	}
 
-	if err := session.GuildMemberRoleAdd(h.cfg.Discord.GuildID, message.Author.ID, h.cfg.Discord.RoleID); err != nil {
-		h.log.Error().Err(err).Msgf("register_handler -> failed to add role %s to player %s", h.cfg.Discord.RoleID, message.Author.ID)
+	if err := session.GuildMemberRoleAdd(h.cfg.Discord.GuildID, message.Author.ID, h.cfg.Discord.RegisterRoleID); err != nil {
+		h.log.Error().Err(err).Msgf("register_handler -> failed to add role %s to player %s", h.cfg.Discord.RegisterRoleID, message.Author.ID)
 	}
 
 	if err := session.MessageReactionAdd(message.ChannelID, message.ID, consts.PositiveReaction); err != nil {
