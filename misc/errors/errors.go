@@ -12,10 +12,6 @@ var PlayerNotFound = &ServiceError{
 	Message: "Você não está registrado, digite `.help` para saber mais",
 }
 
-var OtherPlayerNotFound = &ServiceError{
-	Message: "O jogador não foi encontrado",
-}
-
 var PlayerAlreadyRegistered = &ServiceError{
 	Message: "Você já está registrado",
 }

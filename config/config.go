@@ -10,6 +10,7 @@ type Discord struct {
 	SubscriberRoleID string
 	Prefix           string
 	Token            string
+	PossibleTeams    string
 }
 
 type Service struct {
@@ -34,6 +35,7 @@ func New() *Config {
 			SubscriberRoleID: viper.GetString("DISTOPIA_WARS_DISCORD_SUBSCRIBER_ROLE_ID"),
 			Prefix:           viper.GetString("DISTOPIA_WARS_DISCORD_PREFIX"),
 			Token:            viper.GetString("DISTOPIA_WARS_DISCORD_TOKEN"),
+			PossibleTeams:    viper.GetString("DISTOPIA_WARS_DISCORD_POSSIBLE_TEAMS"),
 		},
 		Service: &Service{
 			Debug: viper.GetBool("DISTOPIA_WARS_SERVICE_DEBUG"),

@@ -14,21 +14,6 @@ func Break(message string) []string {
 	return strings.Fields(message)
 }
 
-func Snowflake(value string) (discordID string, match bool) {
-	builder := strings.Builder{}
-
-	for _, char := range value {
-		if char >= '0' && char <= '9' {
-			builder.WriteRune(char)
-		}
-	}
-
-	discordID = builder.String()
-	match = len(discordID) >= 17 && len(discordID) <= 19
-
-	return discordID, match
-}
-
 func Nickname(value string) (nickname string, match bool) {
 	nickname = strings.ToLower(value)
 	match, _ = regexp.MatchString(`^[a-zA-Z0-9_]{3,16}$`, nickname)
@@ -45,11 +30,4 @@ func NewPassword() string {
 	}
 
 	return string(result)
-}
-
-func Team(value string) (team string, match bool) {
-	team = strings.ToUpper(value)
-	match, _ = regexp.MatchString(`^[A-Z]{2,8}$`, team)
-
-	return team, match
 }

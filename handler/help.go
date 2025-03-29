@@ -55,6 +55,10 @@ func (h *Handler) Help(session *discordgo.Session, message *discordgo.MessageCre
 				Value: "Exibe as informações públicas da sua conta",
 			},
 			{
+				Name:  ".join `team`",
+				Value: "Se junta a um time, deixando o anterior caso possua",
+			},
+			{
 				Name:  ".login",
 				Value: "Envia uma DM com a sua senha do Distopia Wars",
 			},
