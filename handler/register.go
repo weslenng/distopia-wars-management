@@ -56,19 +56,22 @@ func (h *Handler) Register(session *discordgo.Session, message *discordgo.Messag
 		GuildID:   message.GuildID,
 	}
 
+	operator := slices.Contains(message.Member.Roles, h.cfg.Discord.OperatorRoleID)
 	subscriber := slices.Contains(message.Member.Roles, h.cfg.Discord.SubscriberRoleID)
 
-	if !subscriber {
-		reply := &discordgo.MessageSend{
-			Content:   "Você não é inscrito no canal. Talvez tenha esquecido de vincular a conta da Twitch com o Discord?",
-			Reference: reference,
-		}
+	if !operator {
+		if !subscriber {
+			reply := &discordgo.MessageSend{
+				Content:   "Você não é inscrito no canal. Talvez tenha esquecido de vincular a conta da Twitch com o Discord?",
+				Reference: reference,
+			}
 
-		if _, err := session.ChannelMessageSendComplex(message.ChannelID, reply); err != nil {
-			h.log.Error().Err(err).Msgf("register_handler -> failed to reply to message %s", message.ID)
-		}
+			if _, err := session.ChannelMessageSendComplex(message.ChannelID, reply); err != nil {
+				h.log.Error().Err(err).Msgf("register_handler -> failed to reply to message %s", message.ID)
+			}
 
-		return
+			return
+		}
 	}
 
 	if len(args) != RegisterArgs {
