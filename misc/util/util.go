@@ -49,7 +49,7 @@ func NewPassword() string {
 
 func Team(value string) (team string, match bool) {
 	team = strings.ToUpper(value)
-	match, _ = regexp.MatchString(`^[A-Z]{2,3}$`, team)
+	match, _ = regexp.MatchString(`^[A-Z]{2,8}$`, team)
 
 	return team, match
 }

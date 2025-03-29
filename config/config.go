@@ -6,7 +6,7 @@ type Discord struct {
 	GuildID          string
 	ChannelID        string
 	DeveloperID      string
-	RegisterRoleID   string
+	OperatorRoleID   string
 	SubscriberRoleID string
 	Prefix           string
 	Token            string
@@ -30,7 +30,7 @@ func New() *Config {
 			GuildID:          viper.GetString("DISTOPIA_WARS_DISCORD_GUILD_ID"),
 			ChannelID:        viper.GetString("DISTOPIA_WARS_DISCORD_CHANNEL_ID"),
 			DeveloperID:      viper.GetString("DISTOPIA_WARS_DISCORD_DEVELOPER_ID"),
-			RegisterRoleID:   viper.GetString("DISTOPIA_WARS_DISCORD_REGISTER_ROLE_ID"),
+			OperatorRoleID:   viper.GetString("DISTOPIA_WARS_DISCORD_OPERATOR_ROLE_ID"),
 			SubscriberRoleID: viper.GetString("DISTOPIA_WARS_DISCORD_SUBSCRIBER_ROLE_ID"),
 			Prefix:           viper.GetString("DISTOPIA_WARS_DISCORD_PREFIX"),
 			Token:            viper.GetString("DISTOPIA_WARS_DISCORD_TOKEN"),

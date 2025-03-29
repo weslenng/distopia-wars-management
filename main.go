@@ -31,6 +31,7 @@ func main() {
 
 	discord.AddHandler(handler.Help)
 	discord.AddHandler(handler.Info)
+	discord.AddHandler(handler.JoinTeam)
 	discord.AddHandler(handler.Login)
 	discord.AddHandler(handler.Register)
 

@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	"slices"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/weslenng/cuba-wars-management/misc/consts"
@@ -55,14 +56,7 @@ func (h *Handler) Register(session *discordgo.Session, message *discordgo.Messag
 		GuildID:   message.GuildID,
 	}
 
-	subscriber := false
-
-	for _, role := range message.Member.Roles {
-		if role == h.cfg.Discord.SubscriberRoleID {
-			subscriber = true
-			break
-		}
-	}
+	subscriber := slices.Contains(message.Member.Roles, h.cfg.Discord.SubscriberRoleID)
 
 	if !subscriber {
 		reply := &discordgo.MessageSend{
