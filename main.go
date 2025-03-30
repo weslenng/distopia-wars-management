@@ -34,8 +34,9 @@ func main() {
 	discord.AddHandler(handler.Join)
 	discord.AddHandler(handler.Login)
 	discord.AddHandler(handler.Register)
+	discord.AddHandler(handler.Sync)
 
-	discord.Identify.Intents = discordgo.IntentsGuildMessages
+	discord.Identify.Intents = discordgo.IntentsAll
 
 	if err := discord.Open(); err != nil {
 		end(log, err)

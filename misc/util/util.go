@@ -31,3 +31,27 @@ func NewPassword() string {
 
 	return string(result)
 }
+
+type Team struct {
+	RoleID string
+	Name   string
+}
+
+func ParseTeams(possibleTeams string) (result []Team) {
+	roleTeams := strings.Split(possibleTeams, ",")
+
+	for _, roleTeam := range roleTeams {
+		args := strings.Split(roleTeam, "=")
+
+		if len(args) != 2 {
+			continue
+		}
+
+		result = append(result, Team{
+			RoleID: args[0],
+			Name:   args[1],
+		})
+	}
+
+	return result
+}

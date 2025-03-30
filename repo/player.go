@@ -51,10 +51,10 @@ func (r *Repository) InsertPlayer(ctx context.Context, player models.Player) (pl
 	return playerID, nil
 }
 
-func (r *Repository) GetPlayersByTeam(ctx context.Context, team string) (players []models.Player, err error) {
-	query := `SELECT * FROM player WHERE minecraft_team = ?;`
+func (r *Repository) GetPlayers(ctx context.Context) (players []models.Player, err error) {
+	query := `SELECT * FROM player;`
 
-	rows, err := r.sqlite.QueryxContext(ctx, query, team)
+	rows, err := r.sqlite.QueryxContext(ctx, query)
 	if err != nil {
 		return players, err
 	}
