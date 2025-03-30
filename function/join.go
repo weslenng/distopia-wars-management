@@ -17,6 +17,10 @@ func (f *Function) Join(ctx context.Context, discordID, team string) (player mod
 		return player, errors.PlayerNotFound
 	}
 
+	if len(player.MinecraftTeam) > 0 {
+		return player, errors.PlayerAlreadyJoined
+	}
+
 	if err := f.repo.UpdatePlayerTeam(ctx, player.ID, team); err != nil {
 		return player, err
 	}

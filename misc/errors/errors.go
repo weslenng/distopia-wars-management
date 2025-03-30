@@ -8,14 +8,18 @@ func (e *ServiceError) Error() string {
 	return e.Message
 }
 
-var PlayerNotFound = &ServiceError{
-	Message: "Você não está registrado, digite `.help` para saber mais",
+var NicknameAlreadyExists = &ServiceError{
+	Message: "O nickname já está em uso",
+}
+
+var PlayerAlreadyJoined = &ServiceError{
+	Message: "Você já está em um time",
 }
 
 var PlayerAlreadyRegistered = &ServiceError{
 	Message: "Você já está registrado",
 }
 
-var NicknameAlreadyExists = &ServiceError{
-	Message: "O nickname já está em uso",
+var PlayerNotFound = &ServiceError{
+	Message: "Você não está registrado, digite `.help` para saber mais",
 }
