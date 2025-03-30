@@ -97,12 +97,22 @@ func (h *Handler) Sync(session *discordgo.Session, message *discordgo.MessageCre
 	}
 
 	for _, player := range players {
+		if err := session.GuildMemberRoleAdd(message.GuildID, player.DiscordID, h.cfg.Discord.RegisterRoleID); err != nil {
+			h.log.Error().Err(err).Msgf("sync_handler -> failed to add register role to player %s", player.DiscordID)
+		}
+
+		time.Sleep(1 * time.Second)
+
 		if player.MinecraftTeam == roleTeams[0].Name {
-			session.GuildMemberRoleAdd(message.GuildID, player.DiscordID, roleTeams[0].RoleID)
+			if err := session.GuildMemberRoleAdd(message.GuildID, player.DiscordID, roleTeams[0].RoleID); err != nil {
+				h.log.Error().Err(err).Msgf("sync_handler -> failed to add team role to player %s", player.DiscordID)
+			}
 		}
 
 		if player.MinecraftTeam == roleTeams[1].Name {
-			session.GuildMemberRoleAdd(message.GuildID, player.DiscordID, roleTeams[1].RoleID)
+			if err := session.GuildMemberRoleAdd(message.GuildID, player.DiscordID, roleTeams[1].RoleID); err != nil {
+				h.log.Error().Err(err).Msgf("sync_handler -> failed to add team role to player %s", player.DiscordID)
+			}
 		}
 
 		time.Sleep(1 * time.Second)

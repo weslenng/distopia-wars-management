@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 	"fmt"
-	"slices"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -71,10 +70,19 @@ func (h *Handler) Join(session *discordgo.Session, message *discordgo.MessageCre
 		return
 	}
 
-	possibleTeams := strings.Split(h.cfg.Discord.PossibleTeams, ",")
 	playerTeam := strings.ToUpper(args[1])
+	possibleTeams := util.ParseTeams(h.cfg.Discord.PossibleTeams)
 
-	if !slices.Contains(possibleTeams, playerTeam) {
+	possibleTeam := util.Team{}
+
+	for _, entry := range possibleTeams {
+		if playerTeam == entry.Name {
+			possibleTeam = entry
+			break
+		}
+	}
+
+	if len(possibleTeam.RoleID) == 0 {
 		reply := &discordgo.MessageSend{
 			Content:   "O time escolhido é inválido",
 			Reference: reference,
@@ -89,7 +97,7 @@ func (h *Handler) Join(session *discordgo.Session, message *discordgo.MessageCre
 
 	ctx := context.Background()
 
-	if _, err := h.function.Join(ctx, message.Author.ID, playerTeam); err != nil {
+	if _, err := h.function.Join(ctx, message.Author.ID, possibleTeam.Name); err != nil {
 		reply := &discordgo.MessageSend{
 			Content:   err.Error(),
 			Reference: reference,
@@ -100,6 +108,10 @@ func (h *Handler) Join(session *discordgo.Session, message *discordgo.MessageCre
 		}
 
 		return
+	}
+
+	if err := session.GuildMemberRoleAdd(h.cfg.Discord.GuildID, message.Author.ID, possibleTeam.RoleID); err != nil {
+		h.log.Error().Err(err).Msgf("join_handler -> failed to add role %s to player %s", possibleTeam.RoleID, message.Author.ID)
 	}
 
 	if err := session.MessageReactionAdd(message.ChannelID, message.ID, consts.PositiveReaction); err != nil {
