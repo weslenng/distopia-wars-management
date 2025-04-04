@@ -32,15 +32,44 @@ func New(ctx context.Context, log zerolog.Logger) (repo *Repository, err error) 
 }
 
 func (r *Repository) Migrate(ctx context.Context) (err error) {
+	// Create migrations table if it doesn't exist
+	query := `
+		CREATE TABLE IF NOT EXISTS migrations (
+			migration_id INTEGER PRIMARY KEY,
+			applied_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		);`
+
+	if _, err := r.sqlite.ExecContext(ctx, query); err != nil {
+		return err
+	}
+
 	functions := []func(ctx context.Context) error{
 		r.Migrate1,
 		r.Migrate2,
 	}
 
 	for functionIndex, function := range functions {
-		r.log.Info().Msgf("Migrating %d of %d", functionIndex+1, len(functions))
+		migrationID := functionIndex + 1
+
+		// Check if migration has already been applied
+		var count int
+		if err := r.sqlite.GetContext(ctx, &count, "SELECT COUNT(*) FROM migrations WHERE migration_id = ?", migrationID); err != nil {
+			return err
+		}
+
+		if count > 0 {
+			r.log.Info().Msgf("Migration %d already applied, skipping", migrationID)
+			continue
+		}
+
+		r.log.Info().Msgf("Applying migration %d of %d", migrationID, len(functions))
 
 		if err := function(ctx); err != nil {
+			return err
+		}
+
+		// Record that migration was applied
+		if _, err := r.sqlite.ExecContext(ctx, "INSERT INTO migrations (migration_id) VALUES (?)", migrationID); err != nil {
 			return err
 		}
 	}
