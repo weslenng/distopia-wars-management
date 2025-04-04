@@ -36,7 +36,7 @@ func (r *Repository) UpdatePlayerTeam(ctx context.Context, playerID int64, team 
 }
 
 func (r *Repository) InsertPlayer(ctx context.Context, player models.Player) (playerID int64, err error) {
-	query := `INSERT INTO player (discord_id, minecraft_nickname, minecraft_password, minecraft_team) VALUES (:discord_id, :minecraft_nickname, :minecraft_password, :minecraft_team);`
+	query := `INSERT INTO player (discord_id, minecraft_nickname, minecraft_password, minecraft_team, can_change_minecraft_team) VALUES (:discord_id, :minecraft_nickname, :minecraft_password, :minecraft_team, :can_change_minecraft_team);`
 
 	result, err := r.sqlite.NamedExecContext(ctx, query, player)
 	if err != nil {
@@ -72,4 +72,14 @@ func (r *Repository) GetPlayers(ctx context.Context) (players []models.Player, e
 	}
 
 	return players, nil
+}
+
+func (r *Repository) UpdatePlayerCanChangeMinecraftTeam(ctx context.Context, playerID int64, canChangeMinecraftTeam bool) (err error) {
+	query := `UPDATE player SET can_change_minecraft_team = ? WHERE player_id = ?;`
+
+	if _, err := r.sqlite.ExecContext(ctx, query, canChangeMinecraftTeam, playerID); err != nil {
+		return err
+	}
+
+	return nil
 }

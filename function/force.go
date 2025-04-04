@@ -7,7 +7,7 @@ import (
 	"github.com/weslenng/cuba-wars-management/models"
 )
 
-func (f *Function) Join(ctx context.Context, discordID, team string) (player models.Player, err error) {
+func (f *Function) Force(ctx context.Context, discordID, team string) (player models.Player, err error) {
 	player, err = f.repo.SelectPlayerByDiscordID(ctx, discordID)
 	if err != nil {
 		return player, err
@@ -17,11 +17,11 @@ func (f *Function) Join(ctx context.Context, discordID, team string) (player mod
 		return player, errors.PlayerNotFound
 	}
 
-	if !player.CanChangeMinecraftTeam {
-		return player, errors.PlayerCannotChangeTeam
+	if err := f.repo.UpdatePlayerTeam(ctx, player.ID, team); err != nil {
+		return player, err
 	}
 
-	if err := f.repo.UpdatePlayerTeam(ctx, player.ID, team); err != nil {
+	if err := f.repo.UpdatePlayerCanChangeMinecraftTeam(ctx, player.ID, false); err != nil {
 		return player, err
 	}
 

@@ -110,6 +110,12 @@ func (h *Handler) Join(session *discordgo.Session, message *discordgo.MessageCre
 		return
 	}
 
+	for _, possibleTeam := range possibleTeams {
+		if err := session.GuildMemberRoleRemove(h.cfg.Discord.GuildID, message.Author.ID, possibleTeam.RoleID); err != nil {
+			h.log.Error().Err(err).Msgf("join_handler -> failed to remove role %s from player %s", possibleTeam.RoleID, message.Author.ID)
+		}
+	}
+
 	if err := session.GuildMemberRoleAdd(h.cfg.Discord.GuildID, message.Author.ID, possibleTeam.RoleID); err != nil {
 		h.log.Error().Err(err).Msgf("join_handler -> failed to add role %s to player %s", possibleTeam.RoleID, message.Author.ID)
 	}

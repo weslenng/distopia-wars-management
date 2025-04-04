@@ -34,6 +34,7 @@ func New(ctx context.Context, log zerolog.Logger) (repo *Repository, err error) 
 func (r *Repository) Migrate(ctx context.Context) (err error) {
 	functions := []func(ctx context.Context) error{
 		r.Migrate1,
+		r.Migrate2,
 	}
 
 	for functionIndex, function := range functions {
@@ -56,6 +57,16 @@ func (r *Repository) Migrate1(ctx context.Context) (err error) {
 			minecraft_password TEXT NOT NULL,
 			minecraft_team TEXT NOT NULL
 		);`
+
+	if _, err := r.sqlite.ExecContext(ctx, query); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *Repository) Migrate2(ctx context.Context) (err error) {
+	query := `ALTER TABLE player ADD COLUMN can_change_minecraft_team BOOLEAN DEFAULT 1;`
 
 	if _, err := r.sqlite.ExecContext(ctx, query); err != nil {
 		return err

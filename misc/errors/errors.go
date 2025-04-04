@@ -23,3 +23,7 @@ var PlayerAlreadyRegistered = &ServiceError{
 var PlayerNotFound = &ServiceError{
 	Message: "Você não está registrado, digite `.help` para saber mais",
 }
+
+var PlayerCannotChangeTeam = &ServiceError{
+	Message: "Você não tem permissão para mudar de time",
+}

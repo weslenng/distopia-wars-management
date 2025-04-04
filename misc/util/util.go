@@ -55,3 +55,18 @@ func ParseTeams(possibleTeams string) (result []Team) {
 
 	return result
 }
+
+func Snowflake(value string) (discordID string, match bool) {
+	builder := strings.Builder{}
+
+	for _, char := range value {
+		if char >= '0' && char <= '9' {
+			builder.WriteRune(char)
+		}
+	}
+
+	discordID = builder.String()
+	match = len(discordID) >= 17 && len(discordID) <= 19
+
+	return discordID, match
+}
