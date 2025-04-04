@@ -20,9 +20,10 @@ func (f *Function) Register(ctx context.Context, discordID, nickname string) (pl
 	}
 
 	player = models.Player{
-		DiscordID:         discordID,
-		MinecraftNickname: nickname,
-		MinecraftPassword: util.NewPassword(),
+		DiscordID:              discordID,
+		MinecraftNickname:      nickname,
+		MinecraftPassword:      util.NewPassword(),
+		CanChangeMinecraftTeam: true,
 	}
 
 	playerID, err := f.repo.InsertPlayer(ctx, player)
