@@ -29,6 +29,7 @@ func main() {
 	discord, err := discordgo.New(cfg.Discord.Token)
 	end(log, err)
 
+	discord.AddHandler(handler.Force)
 	discord.AddHandler(handler.Help)
 	discord.AddHandler(handler.Info)
 	discord.AddHandler(handler.Join)
