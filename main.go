@@ -32,9 +32,9 @@ func main() {
 	discord.AddHandler(handler.Force)
 	discord.AddHandler(handler.Help)
 	discord.AddHandler(handler.Info)
-	discord.AddHandler(handler.Join)
+	// discord.AddHandler(handler.Join)
 	discord.AddHandler(handler.Login)
-	discord.AddHandler(handler.Register)
+	// discord.AddHandler(handler.Register)
 	discord.AddHandler(handler.Sync)
 
 	discord.Identify.Intents = discordgo.IntentsAll
